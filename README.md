@@ -3,6 +3,23 @@ AtgAnt
 
 AtgAnt is a set of build tools for making the compilation of ATG Dynamo projects much easier. As its name suggests, AtgAnt uses Apache Ant. AtgAnt is based on the [project of the same name][atgantsfnet].
 
+Installation
+------------
+
+First, download the source code:
+
+    git clone https://github.com/jvz/atgant.git
+
+Next, build the project:
+
+    ./gradlew build
+
+Finally, copy the generated `atgant-*.jar` to your project somewhere like `lib`:
+
+    cp build/libs/atgant-*.jar path/to/project/lib/atgant.jar
+
+In the future, you will be able to download the JAR via Ivy, Maven, Gradle, etc., although doesn't that defeat the purpose of using Ant? I don't think so! We can use different build systems for different projects. See also [atg-gradle-plugin][atgplugin].
+
 Usage
 -----
 
@@ -12,7 +29,7 @@ The following is your ideal build.xml file:
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="base" default="clean-build">
     <property name="atg.home" value="${user.home}/ATG/ATG10.1.2"/>
-    <taskdef resource="atgant.xml" classpath="atgant.jar"/>
+    <taskdef resource="atgant.xml" classpath="lib/atgant.jar"/>
 
     <target name="clean-build" description="Clean and build directory">
         <subant target="clean-build" genericantfile="atg-module-build.xml">
@@ -161,5 +178,6 @@ Developed by Piran Montford, with the kind help of e2x Ltd. Updated by @jvz.
 Warranty
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE DEVELOPERS OR ANY OTHER CONTRIBUTOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+[atgplugin]: https://github.com/jvz/atg-gradle-plugin
 [atgantsfnet]: http://atgant.sf.net/
 [junit]: http://junit.org/
