@@ -1,4 +1,4 @@
-package atgant;
+package atg.tools.ant.plugin;
 
 import java.util.ArrayList;
 

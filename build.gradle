@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group = 'atg'
-version = '1.0.1'
+version = '1.0.2-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -19,7 +19,7 @@ jar {
                 'Implementation-Title': project.name,
                 'Implementation-Version': project.version,
                 'Implementation-Documentation': 'http://atgant.sf.net/',
-                'Main-Class': 'atgant.AtgAntVersion'
+                'Main-Class': 'atg.tools.ant.plugin.AtgAntVersion'
         )
     }
 }

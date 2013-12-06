@@ -1,5 +1,7 @@
-package atgant;
+package atg;
 
+import atg.tools.ant.plugin.AtgModule;
+import atg.tools.ant.plugin.AtgSystem;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

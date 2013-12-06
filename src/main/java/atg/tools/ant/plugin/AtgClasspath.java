@@ -1,4 +1,4 @@
-package atgant;
+package atg.tools.ant.plugin;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.types.DataType;
