@@ -13,7 +13,7 @@ public class AtgModule {
     private final String name;
     private Manifest manifest;
     private final AtgSystem atgSystem;
-    private File moduleDir;
+    private final File moduleDir;
 
     public AtgModule(AtgSystem atgSystem, String moduleName) {
         this.atgSystem = atgSystem;

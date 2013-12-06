@@ -130,7 +130,7 @@ public class TestAtgSystem {
             throws Exception {
         AtgSystem atgSystem = new AtgSystem("/Users/piran/Documents/projects/atgant/workspace/AtgAnt/testAtg");
         try {
-            @SuppressWarnings("unused")
+            @SuppressWarnings({ "unused", "UnusedAssignment" })
             List<AtgModule> modPath = atgSystem.getAllModules("circ1");
             fail("Should have found circular dependency between circ1 and circ2");
         } catch (IllegalArgumentException iae) {
