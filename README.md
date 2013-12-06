@@ -11,16 +11,17 @@ The following is your ideal build.xml file:
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="base" default="clean-build">
+    <property name="atg.home" value="${user.home}/ATG/ATG10.1.2"/>
+    <taskdef resource="atgant.xml" classpath="atgant.jar"/>
 
-    <property name="atg.home" value="/opt/ATG/ATG10.1.2" />
-    <taskdef resource="atgant.xml" classpath="atgant.jar" />
-
-    <target name="clean-build" description="Clean and Build directory">
-    <subant target="clean-build" genericantfile="atg-module-build.xml">
-        <atgRequiredModules atgHome="${atg.Home}" modules="proj3,proj1" filters="proj*,base" />
-    </subant>
+    <target name="clean-build" description="Clean and build directory">
+        <subant target="clean-build" genericantfile="atg-module-build.xml">
+            <atgRequiredModules
+                    atgHome="${atg.home}"
+                    modules="proj3,proj1"
+                    filters="proj*,base"/>
+        </subant>
     </target>
-
 </project>
 ```
 
@@ -35,38 +36,34 @@ The `atg-module-build.xml` file looks like this
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="base" default="clean-build">
-    <property name="src.dir" value="src" />
-    <property name="build.dir" value="classes" />
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="classes"/>
 
     <target name="-init">
-        <available property="src.dir.exists" file="${src.dir}" type="dir" />
-        <atgModuleName atgHome="${atg.home}" property="module.name" module="." />
-        <echo message="ATG Module ${module.name}" />
+        <available property="src.dir.exists" file="${src.dir}" type="dir"/>
+        <atgModuleName atgHome="${atg.home}" property="module.name" module="."/>
+        <echo message="ATG Module ${module.name}"/>
     </target>
 
     <target name="-clean">
-        <delete dir="${build.dir}" />
+        <delete dir="${build.dir}"/>
     </target>
 
     <target name="-compile-java" if="src.dir.exists">
-        <mkdir dir="${build.dir}" />
+        <mkdir dir="${build.dir}"/>
         <javac srcdir="${src.dir}"
-             destdir="${build.dir}"
-             debug="on">
-                <classpath>
-                    <atgClasspath
-                        atgHome="${atg.home}"
-                        modules="."
-                    />
-                </classpath>
+               destdir="${build.dir}"
+               debug="on">
+            <classpath>
+                <atgClasspath atgHome="${atg.home}" modules="."/>
+            </classpath>
         </javac>
     </target>
 
-    <target name="-build" depends="-compile-java">
-    </target>
+    <target name="-build" depends="-compile-java"/>
 
-    <target name="clean-build" depends="-init,-clean,-build" description="Clean and Build module">
-    </target>
+    <target name="clean-build" depends="-init,-clean,-build"
+            description="Clean and Build module"/>
 
 </project>
 ```
