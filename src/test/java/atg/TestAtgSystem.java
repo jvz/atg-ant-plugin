@@ -2,6 +2,7 @@ package atg;
 
 import atg.tools.ant.plugin.AtgModule;
 import atg.tools.ant.plugin.AtgSystem;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -89,7 +90,7 @@ public class TestAtgSystem {
                         ATG_HOME + "/DAS/solid/SolidDriver2.1.jar");
     }
 
-    private void assertClassPathList(List<File> classPath, String pathList) {
+    private void assertClassPathList(@NotNull List<File> classPath, String pathList) {
         StringBuilder builtList = new StringBuilder();
         for (File f : classPath) {
             builtList.append(f).append(":");

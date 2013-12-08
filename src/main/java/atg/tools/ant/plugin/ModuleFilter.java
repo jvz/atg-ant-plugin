@@ -1,10 +1,12 @@
 package atg.tools.ant.plugin;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 public abstract class ModuleFilter {
 
-    public static ModuleFilter parseStringList(String filterListString) {
+    public static ModuleFilter parseStringList(@NotNull String filterListString) {
         final ArrayList<ModuleFilter> filters = new ArrayList<ModuleFilter>();
         String[] filterStringArray = filterListString.split("[,;:]");
         for (String filterString : filterStringArray) {
