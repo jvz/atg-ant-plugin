@@ -8,7 +8,7 @@ Installation
 
 First, download the source code:
 
-    git clone https://github.com/jvz/atgant.git
+    git clone https://github.com/jvz/atg-ant-plugin.git
 
 Next, build the project:
 
