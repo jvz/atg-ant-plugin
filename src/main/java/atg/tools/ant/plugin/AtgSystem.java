@@ -1,4 +1,4 @@
-package atgant;
+package atg.tools.ant.plugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class AtgSystem {
 
     private final File atgDir;
     private final File baseDir;
-    private Map<String, AtgModule> moduleCache = new HashMap<String, AtgModule>();
+    private final Map<String, AtgModule> moduleCache = new HashMap<String, AtgModule>();
 
     public AtgSystem(String atgHome) {
         this(new File(atgHome));
@@ -73,9 +73,8 @@ public class AtgSystem {
     }
 
     public List<AtgModule> getAllModules(List<AtgModule> moduleList) {
-        DependencyBuilder builder = new DependencyBuilder(this, moduleList);
-        List<AtgModule> moduleOrder = builder.getModuleOrder();
-        return moduleOrder;
+        DependencyBuilder builder = new DependencyBuilder(moduleList);
+        return builder.getModuleOrder();
     }
 
     public List<AtgModule> getModuleList(String moduleListString) {
@@ -139,8 +138,7 @@ public class AtgSystem {
 
     private AtgModule testModule(File currDir) {
         try {
-            AtgModule m = getModule(currDir);
-            return m;
+            return getModule(currDir);
         } catch (Throwable ignored) {
         }
         return null;

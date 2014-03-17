@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <antlib>
-    <typedef name="atgClasspath" classname="atgant.AtgClasspath"/>
-    <typedef name="atgRequiredModules" classname="atgant.AtgRequiredModules"/>
-    <taskdef name="atgModuleName" classname="atgant.AtgModuleName"/>
+    <typedef name="atgClasspath" classname="atg.tools.ant.plugin.AtgClasspath"/>
+    <typedef name="atgRequiredModules" classname="atg.tools.ant.plugin.AtgRequiredModules"/>
+    <taskdef name="atgModuleName" classname="atg.tools.ant.plugin.AtgModuleName"/>
 </antlib>

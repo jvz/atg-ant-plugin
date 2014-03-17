@@ -1,4 +1,4 @@
-package atgant;
+package atg.tools.ant.plugin;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,10 +7,10 @@ import java.util.Stack;
 
 public class DependencyBuilder {
 
-    private List<AtgModule> moduleOrder = new ArrayList<AtgModule>();
-    private Stack<AtgModule> stackedModules = new Stack<AtgModule>();
+    private final List<AtgModule> moduleOrder = new ArrayList<AtgModule>();
+    private final Stack<AtgModule> stackedModules = new Stack<AtgModule>();
 
-    public DependencyBuilder(AtgSystem atgSystem, List<AtgModule> moduleList) {
+    public DependencyBuilder(List<AtgModule> moduleList) {
         depthFirstAddAllModules(moduleList);
     }
 

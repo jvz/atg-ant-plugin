@@ -1,5 +1,8 @@
-package atgant;
+package atg;
 
+import atg.tools.ant.plugin.AtgModule;
+import atg.tools.ant.plugin.AtgSystem;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -87,7 +90,7 @@ public class TestAtgSystem {
                         ATG_HOME + "/DAS/solid/SolidDriver2.1.jar");
     }
 
-    private void assertClassPathList(List<File> classPath, String pathList) {
+    private void assertClassPathList(@NotNull List<File> classPath, String pathList) {
         StringBuilder builtList = new StringBuilder();
         for (File f : classPath) {
             builtList.append(f).append(":");
@@ -128,7 +131,7 @@ public class TestAtgSystem {
             throws Exception {
         AtgSystem atgSystem = new AtgSystem("/Users/piran/Documents/projects/atgant/workspace/AtgAnt/testAtg");
         try {
-            @SuppressWarnings("unused")
+            @SuppressWarnings({ "unused", "UnusedAssignment" })
             List<AtgModule> modPath = atgSystem.getAllModules("circ1");
             fail("Should have found circular dependency between circ1 and circ2");
         } catch (IllegalArgumentException iae) {
