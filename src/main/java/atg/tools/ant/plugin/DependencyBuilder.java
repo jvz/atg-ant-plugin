@@ -1,7 +1,5 @@
 package atg.tools.ant.plugin;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +14,6 @@ public class DependencyBuilder {
         depthFirstAddAllModules(moduleList);
     }
 
-    @NotNull
     public List<AtgModule> getModuleOrder() {
         return moduleOrder;
     }

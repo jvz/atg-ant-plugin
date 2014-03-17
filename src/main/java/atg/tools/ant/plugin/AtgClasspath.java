@@ -1,13 +1,12 @@
 package atg.tools.ant.plugin;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.types.DataType;
-import org.apache.tools.ant.types.ResourceCollection;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.types.DataType;
+import org.apache.tools.ant.types.ResourceCollection;
 
 public class AtgClasspath
         extends DataType
@@ -44,7 +43,6 @@ public class AtgClasspath
         return classPathFileList.size();
     }
 
-    @NotNull
     @SuppressWarnings("unchecked")
     public Iterator iterator() {
         buildClassPathFileList();

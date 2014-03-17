@@ -1,13 +1,12 @@
 package atg.tools.ant.plugin;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.types.DirSet;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.types.DirSet;
 
 public class AtgRequiredModules
         extends DirSet {
@@ -63,7 +62,6 @@ public class AtgRequiredModules
         return moduleDirectoryList.size();
     }
 
-    @NotNull
     @Override
     @SuppressWarnings("unchecked")
     public Iterator iterator() {

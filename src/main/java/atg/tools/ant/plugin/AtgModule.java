@@ -1,7 +1,5 @@
 package atg.tools.ant.plugin;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,7 +13,6 @@ public class AtgModule {
     private final String name;
     private Manifest manifest;
     private final AtgSystem atgSystem;
-    @NotNull
     private final File moduleDir;
 
     public AtgModule(AtgSystem atgSystem, String moduleName) {

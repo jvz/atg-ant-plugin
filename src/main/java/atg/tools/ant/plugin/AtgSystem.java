@@ -1,7 +1,5 @@
 package atg.tools.ant.plugin;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -138,7 +136,6 @@ public class AtgSystem {
         }
     }
 
-    @Nullable
     private AtgModule testModule(File currDir) {
         try {
             return getModule(currDir);
