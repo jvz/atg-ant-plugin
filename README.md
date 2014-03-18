@@ -13,14 +13,9 @@ First, download the source code:
 
     git clone https://github.com/jvz/atg-ant-plugin.git
 
-Next, build the project:
+Next, build and install the project to your local Ant lib directory:
 
-    ant dist
-
-Finally, copy the generated `target/atg-ant-plugin.jar` file to your
-Ant library home directory such as `~/.ant/lib/`. You can also copy
-the JAR file to your project (say, `lib/`), and then reference it as
-such in your `build.xml` file.
+    ant install
 
 Usage
 -----
@@ -29,9 +24,8 @@ The following is your ideal `build.xml` file:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="base" default="clean-build">
-    <property name="atg.home" value="${user.home}/ATG/ATG11.0"/>
-    <taskdef resource="atgant.xml" classpath="lib/atgant.jar"/>
+<project name="base" default="clean-build" xmlns:atg="antlib:atg.tools.ant">
+	<atg:atg home="${user.home}/ATG/ATG11.0"/>
 
     <target name="clean-build" description="Clean and build directory">
         <subant target="clean-build" genericantfile="atg-module-build.xml">
