@@ -7,7 +7,7 @@ Usage:
 		<atg:classpath moduleCollectionRef="atg.modules"/>
 	</path>
 -->
-	<typedef name="classpath" classname="atg.tools.ant.types.ClassPath"/>
+	<typedef name="module-classpath" classname="atg.tools.ant.types.ClassPath"/>
 
 <!--
 Usage:
@@ -24,5 +24,13 @@ Usage:
 		<atg:atg home="${atg.home}" id="atg.installation"/>
 	-->
 	<typedef name="atg" classname="atg.tools.ant.types.AtgInstallation"/>
+
+	<typedef name="classpath" classname="org.apache.tools.ant.types.Path"/>
+
+	<typedef name="configpath" classname="org.apache.tools.ant.types.Path"/>
+
+	<taskdef name="required-modules" classname="atg.tools.ant.tasks.RequiredModules"/>
+
+	<taskdef name="gen-manifest" classname="atg.tools.ant.tasks.GenerateManifest"/>
 
 </antlib>

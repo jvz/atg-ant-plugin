@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 import atg.tools.ant.util.ModuleUtils;
 import atg.tools.ant.util.StringUtils;
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileList;
-import org.apache.tools.ant.types.LogLevel;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.types.resources.FileResource;
@@ -30,11 +30,11 @@ public class Module
 
 	private static final Pattern WHITESPACE = Pattern.compile( "\\s+" );
 
-	private static final Name ATG_REQUIRED = new Name( "ATG-Required" );
+	private static final Name ATG_REQUIRED = new Name( ModuleUtils.ATG_REQUIRED );
 
-	private static final Name ATG_CLASS_PATH = new Name( "ATG-Class-Path" );
+	private static final Name ATG_CLASS_PATH = new Name( ModuleUtils.ATG_CLASS_PATH );
 
-	private AtgInstallation atgInstallation;
+	private AtgInstallation atg;
 
 	private Manifest manifest;
 
@@ -44,7 +44,7 @@ public class Module
 	 * @param atgInstallation location of ATG installation.
 	 */
 	public void setAtg( final AtgInstallation atgInstallation ) {
-		this.atgInstallation = atgInstallation;
+		this.atg = atgInstallation;
 		setBaseDir( atgInstallation.getFile() );
 	}
 
@@ -116,7 +116,7 @@ public class Module
 		for( String module : modules ) {
 			if( StringUtils.isNotBlank( module ) ) {
 				debug( "Adding module `" + module + "' to collection." );
-				requiredModules.add( atgInstallation.getModule( module ) );
+				requiredModules.add( atg.getModule( module ) );
 			}
 		}
 		return requiredModules;
@@ -162,11 +162,11 @@ public class Module
 	}
 
 	private void debug( final String message ) {
-		log( message, LogLevel.DEBUG.getLevel() );
+		log( message, Project.MSG_DEBUG );
 	}
 
 	private void error( final String message ) {
-		log( message, LogLevel.ERR.getLevel() );
+		log( message, Project.MSG_ERR );
 	}
 
 }

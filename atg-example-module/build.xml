@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ExampleModule" xmlns:atg="antlib:atg.tools.ant">
+	<property name="atg.home" value="${user.home}/ATG/ATG10.1.2"/>
+	<property name="source.dir" value="src/main"/>
+	<property name="source.java.dir" value="${source.dir}/java"/>
+	<property name="config.dir" value="${source.dir}/config"/>
+	<property name="resources.dir" value="${source.dir}/resources"/>
+	<property name="webapp.dir" value="${source.dir}/webapp"/>
+	<property name="application.dir" value="${source.dir}/application"/>
+	<property name="build.dir" value="target"/>
+	<property name="classes.dir" value="${build.dir}/classes"/>
+	<property name="dist.dir" value="${build.dir}/${ant.project.name}"/>
+	<property name="classes.jar" value="${dist.dir}/lib/classes.jar"/>
+	<property name="resources.jar" value="${dist.dir}/lib/resources.jar"/>
+	<property name="config.jar" value="${dist.dir}/config/config.jar"/>
+	<property name="dist.war" value="${build.dir}/${ant.project.name}.war"/>
+	<property name="dist.ear" value="${build.dir}/${ant.project.name}.ear"/>
+	<property name="module.home" value="${atg.home}/${ant.project.name}"/>
+
+	<taskdef uri="antlib:atg.tools.ant"
+			 resource="atg/tools/ant/antlib.xml"
+			 classpath="${user.home}/.ant/lib/atg-ant-plugin.jar"/>
+
+	<taskdef name="atg-ear"
+			 classpath="${atg.home}/home/lib/assembler.jar"
+			 classname="atg.appassembly.ant.CreateUnpackedEarTask"/>
+
+	<atg:atg home="${atg.home}" id="atg"/>
+
+	<path id="classpath">
+		<atg:module-classpath atg="atg">
+			<atg:modules id="atg.modules">
+				<atg:module module="DAS"/>
+				<atg:module module="DSS"/>
+				<!--<atg:module module="DafEar.Admin"/>-->
+			</atg:modules>
+		</atg:module-classpath>
+	</path>
+
+	<target name="-init">
+		<tstamp/>
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${dist.dir}"/>
+	</target>
+
+	<target name="compile" depends="-init">
+		<mkdir dir="${classes.dir}"/>
+		<javac srcdir="${source.java.dir}"
+			   destdir="${classes.dir}"
+			   includeantruntime="false"
+			   classpathref="classpath"
+			   debug="true"/>
+	</target>
+
+	<target name="-pre-dist" depends="compile">
+		<mkdir dir="${dist.dir}/lib"/>
+		<mkdir dir="${dist.dir}/config"/>
+		<mkdir dir="${dist.dir}/META-INF"/>
+	</target>
+
+	<target name="dist" depends="-pre-dist">
+		<jar basedir="${classes.dir}" destfile="${classes.jar}"/>
+		<jar basedir="${resources.dir}" destfile="${resources.jar}"/>
+		<jar basedir="${config.dir}" destfile="${config.jar}"/>
+		<path id="dist.classpath">
+			<fileset dir="${dist.dir}" includes="lib/*.jar"/>
+		</path>
+		<path id="configpath">
+			<fileset dir="${dist.dir}" includes="config/*.jar"/>
+		</path>
+		<atg:gen-manifest modules="atg.modules"
+						  classpathref="dist.classpath"
+						  configpathref="configpath"
+						  file="${dist.dir}/META-INF/MANIFEST.MF"/>
+	</target>
+
+	<target name="war" depends="dist">
+		<war basedir="${webapp.dir}" destfile="${dist.war}">
+			<lib file="${classes.jar}"/>
+		</war>
+	</target>
+
+	<target name="install" depends="war">
+		<mkdir dir="${module.home}"/>
+		<copy todir="${module.home}">
+			<fileset dir="${dist.dir}"/>
+		</copy>
+		<property name="module.j2ee.dir" value="${module.home}/j2ee-apps"/>
+		<mkdir dir="${module.j2ee.dir}"/>
+		<copy todir="${module.j2ee.dir}">
+			<fileset dir="${application.dir}"/>
+		</copy>
+		<copy todir="${module.j2ee.dir}" file="${dist.war}"/>
+	</target>
+
+	<target name="ear" depends="install">
+		<mkdir dir="${dist.ear}"/>
+		<atg-ear destinationfile="${dist.ear}"
+				 dynamoroot="${atg.home}"
+				 dynamomodules="${ant.project.name}"
+				 servername="ATGProduction"
+				 adddistributable="true"/>
+		<copy todir="${dist.ear}">
+			<fileset dir="${application.dir}"/>
+		</copy>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+	</target>
+
+	<target name="uninstall">
+		<delete dir="${module.home}"/>
+	</target>
+
+</project>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="atg-ant-plugin">
+<project name="atg-ant-plugin" default="dist">
 	<property name="source.dir" value="src"/>
 	<property name="source.java.dir" value="${source.dir}/main/java"/>
 	<property name="source.resources.dir" value="${source.dir}/main/resources"/>
@@ -11,13 +11,14 @@
 	<property name="build.test-classes.dir" value="${build.output.dir}/test-classes"/>
 	<property name="build.dist.dir" value="${build.output.dir}/${ant.project.name}"/>
 	<property name="build.dist.jar" value="${build.output.dir}/${ant.project.name}.jar"/>
+	<property name="install.dir" value="${user.home}/.ant/lib"/>
 
 	<target name="-init">
 		<tstamp/>
 		<mkdir dir="${build.output.dir}"/>
 	</target>
 
-	<target name="compile" depends="-init">
+	<target name="compile" depends="-init" description="Compile the source code.">
 		<mkdir dir="${build.classes.dir}"/>
 		<javac srcdir="${source.java.dir}"
 			   destdir="${build.classes.dir}"
@@ -34,13 +35,16 @@
 		</copy>
 	</target>
 
-	<target name="dist" depends="-prepare-dist">
+	<target name="dist" depends="-prepare-dist" description="Build the JAR.">
 		<jar basedir="${build.dist.dir}" destfile="${build.dist.jar}"/>
+		<echo message="${ant.project.name} has been built to ${build.dist.jar}"/>
+		<echo message="You can run `ant install' to install it to ${install.dir}"/>
+		<echo message="To specify an installation location, add `-Dinstall.dir=where' to your arguments."/>
 	</target>
 
-	<target name="install" depends="dist">
-		<mkdir dir="${user.home}/.ant/lib"/>
-		<copy todir="${user.home}/.ant/lib" file="${build.dist.jar}"/>
+	<target name="install" depends="dist" description="Install the JAR to ${install.dir}">
+		<mkdir dir="${install.dir}"/>
+		<copy todir="${install.dir}" file="${build.dist.jar}"/>
 	</target>
 
 	<target name="clean">

@@ -15,6 +15,7 @@ import org.apache.tools.ant.types.ResourceCollection;
 public class ClassPath
 		extends DataType
 		implements ResourceCollection, Iterable<Resource> {
+	// implements Iterable for convenience due to old versions of ant
 
 	private AtgInstallation atgInstallation;
 

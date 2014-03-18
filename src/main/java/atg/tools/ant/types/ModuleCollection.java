@@ -17,6 +17,7 @@ import org.apache.tools.ant.types.ResourceCollection;
 public class ModuleCollection
 		extends DataType
 		implements ResourceCollection, Iterable<Resource> {
+	// implements Iterable for convenience due to old versions of ant
 
 	private final Collection<Resource> modules = new ArrayList<Resource>();
 

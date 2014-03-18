@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<application xmlns="http://java.sun.com/xml/ns/javaee"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_5.xsd"
+			 version="5">
+	<display-name>ExampleModule</display-name>
+	<module>
+		<web>
+			<web-uri>ExampleModule.war</web-uri>
+			<context-root>/</context-root>
+		</web>
+	</module>
+	<module>
+		<web>
+			<web-uri>atg_bootstrap.war</web-uri>
+			<context-root>/dyn</context-root>
+		</web>
+	</module>
+	<module>
+		<ejb>atg_bootstrap_ejb.jar</ejb>
+	</module>
+</application>
