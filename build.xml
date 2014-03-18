@@ -38,6 +38,11 @@
 		<jar basedir="${build.dist.dir}" destfile="${build.dist.jar}"/>
 	</target>
 
+	<target name="install" depends="dist">
+		<mkdir dir="${user.home}/.ant/lib"/>
+		<copy todir="${user.home}/.ant/lib" file="${build.dist.jar}"/>
+	</target>
+
 	<target name="clean">
 		<delete dir="${build.output.dir}"/>
 	</target>
