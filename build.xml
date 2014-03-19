@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="atg-ant-plugin" default="dist" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="atg-ant-plugin" default="build" xmlns:ivy="antlib:org.apache.ivy.ant">
     <property name="source.dir" value="src"/>
     <property name="source.java.dir" value="${source.dir}/main/java"/>
     <property name="source.resources.dir" value="${source.dir}/main/resources"/>
     <property name="source.test.dir" value="${source.dir}/test/java"/>
     <property name="lib.dir" value="lib"/>
     <property name="lib.test.dir" value="${lib.dir}/test"/>
-    <property name="reports.dir" value="reports"/>
     <property name="build.source.version" value="1.6"/>
     <property name="build.target.version" value="1.6"/>
     <property name="build.output.dir" value="target"/>
+    <property name="reports.dir" value="${build.output.dir}/reports"/>
     <property name="build.classes.dir" value="${build.output.dir}/classes"/>
     <property name="build.test-classes.dir" value="${build.output.dir}/test-classes"/>
     <property name="build.dist.dir" value="${build.output.dir}/${ant.project.name}"/>
@@ -21,20 +21,22 @@
         <mkdir dir="${build.output.dir}"/>
     </target>
 
+    <target name="-compile-deps" depends="-init"/>
+
     <target name="-test-deps" depends="-init">
         <mkdir dir="${lib.test.dir}"/>
         <ivy:retrieve conf="test"
                       sync="true"
                       pattern="${lib.test.dir}/[artifact].[ext]"/>
         <path id="test.libs.path">
-            <libfileset dir="${lib.test.dir}"/>
+            <fileset dir="${lib.test.dir}" includes="**/*.jar"/>
         </path>
     </target>
 
-    <target name="deps" depends="-test-deps"
+    <target name="deps" depends="-compile-deps,-test-deps"
             description="--> Synchronize library dependencies (automatically done normally)."/>
 
-    <target name="compile" depends="-init" description="--> Compile the source code.">
+    <target name="compile" depends="-compile-deps" description="--> Compile the source code.">
         <mkdir dir="${build.classes.dir}"/>
         <javac srcdir="${source.java.dir}"
                destdir="${build.classes.dir}"
@@ -43,11 +45,33 @@
                target="${build.target.version}"/>
     </target>
 
-    <target name="test" depends="compile,-test-deps" description="--> Run the unit tests.">
+    <target name="-compile-test" depends="compile,-test-deps">
+        <path id="test.classpath">
+            <pathelement location="${build.classes.dir}"/>
+            <path refid="test.libs.path"/>
+        </path>
+        <mkdir dir="${build.test-classes.dir}"/>
+        <javac srcdir="${source.test.dir}"
+               destdir="${build.test-classes.dir}"
+               classpathref="test.classpath"
+               source="${build.source.version}"
+               target="${build.target.version}"/>
+    </target>
+
+    <target name="test" depends="-compile-test" description="--> Run the unit tests.">
         <mkdir dir="${reports.dir}"/>
-        <junit printsummary="true" fork="true">
+        <junit printsummary="true"
+               showoutput="false"
+               haltonfailure="true"
+               dir="${basedir}">
+            <assertions>
+                <enable/>
+            </assertions>
             <formatter type="xml" usefile="true"/>
-            <classpath refid="test.libs.path"/>
+            <classpath>
+                <path refid="test.classpath"/>
+                <pathelement location="${build.test-classes.dir}"/>
+            </classpath>
             <batchtest todir="${reports.dir}">
                 <fileset dir="${source.test.dir}">
                     <include name="**/*Test.java"/>
@@ -56,7 +80,9 @@
         </junit>
     </target>
 
-    <target name="-prepare-dist" depends="compile">
+    <target name="build" depends="compile,test" description="--> Builds project."/>
+
+    <target name="-prepare-dist" depends="build">
         <mkdir dir="${build.dist.dir}"/>
         <copy todir="${build.dist.dir}">
             <fileset dir="${build.classes.dir}" includes="**/*.class"/>
