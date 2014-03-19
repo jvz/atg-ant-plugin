@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+    <info organisation="atg.tools"
+          module="atg-ant-plugin"
+          revision="2.0-SNAPSHOT">
+        <license name="MIT" url="http://opensource.org/licenses/MIT"/>
+        <description homepage="http://atg-tools.com/">
+            Ant library to aid in creating build scripts for Oracle Commerce ATG modules.
+        </description>
+    </info>
+    <configurations>
+        <conf name="compile"/>
+        <conf name="test" extends="compile"/>
+    </configurations>
+    <dependencies>
+        <dependency name="junit" rev="4.11" org="junit" conf="test->default"/>
+    </dependencies>
+</ivy-module>
