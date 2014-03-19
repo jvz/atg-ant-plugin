@@ -1,12 +1,12 @@
 package atg.tools.ant.plugin;
 
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.types.DirSet;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.types.DirSet;
 
 public class AtgRequiredModules
         extends DirSet {

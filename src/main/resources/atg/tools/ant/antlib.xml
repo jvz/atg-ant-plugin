@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <antlib>
 
-<!--
-Usage:
-	<path id="atg.classpath">
-		<atg:classpath moduleCollectionRef="atg.modules"/>
-	</path>
--->
-	<typedef name="module-classpath" classname="atg.tools.ant.types.ClassPath"/>
+    <!--
+    Usage:
+        <path id="atg.classpath">
+            <atg:classpath moduleCollectionRef="atg.modules"/>
+        </path>
+    -->
+    <typedef name="module-classpath" classname="atg.tools.ant.types.ClassPath"/>
 
-<!--
-Usage:
-	<atg:modules atgInstallationRef="atg.installation" id="atg.modules">
-		<atg:module module="DAS"/>
-		<atg:module module="DPS"/>
-	</atg:modules>
--->
-	<typedef name="modules" classname="atg.tools.ant.types.ModuleCollection"/>
-	<typedef name="module" classname="atg.tools.ant.types.Module"/>
+    <!--
+    Usage:
+        <atg:modules atgInstallationRef="atg.installation" id="atg.modules">
+            <atg:module module="DAS"/>
+            <atg:module module="DPS"/>
+        </atg:modules>
+    -->
+    <typedef name="modules" classname="atg.tools.ant.types.ModuleCollection"/>
+    <typedef name="module" classname="atg.tools.ant.types.Module"/>
 
-	<!--
-	Usage:
-		<atg:atg home="${atg.home}" id="atg.installation"/>
-	-->
-	<typedef name="atg" classname="atg.tools.ant.types.AtgInstallation"/>
+    <!--
+    Usage:
+        <atg:atg home="${atg.home}" id="atg.installation"/>
+    -->
+    <typedef name="atg" classname="atg.tools.ant.types.AtgInstallation"/>
 
-	<typedef name="classpath" classname="org.apache.tools.ant.types.Path"/>
+    <typedef name="classpath" classname="org.apache.tools.ant.types.Path"/>
 
-	<typedef name="configpath" classname="org.apache.tools.ant.types.Path"/>
+    <typedef name="configpath" classname="org.apache.tools.ant.types.Path"/>
 
-	<taskdef name="required-modules" classname="atg.tools.ant.tasks.RequiredModules"/>
+    <taskdef name="required-modules" classname="atg.tools.ant.tasks.RequiredModules"/>
 
-	<taskdef name="gen-manifest" classname="atg.tools.ant.tasks.GenerateManifest"/>
+    <taskdef name="gen-manifest" classname="atg.tools.ant.tasks.GenerateManifest"/>
 
 </antlib>

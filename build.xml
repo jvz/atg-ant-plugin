@@ -3,23 +3,23 @@
     <property name="source.dir" value="src"/>
     <property name="source.java.dir" value="${source.dir}/main/java"/>
     <property name="source.resources.dir" value="${source.dir}/main/resources"/>
-	<property name="source.test.dir" value="${source.dir}/test/java"/>
+    <property name="source.test.dir" value="${source.dir}/test/java"/>
     <property name="lib.dir" value="lib"/>
     <property name="lib.test.dir" value="${lib.dir}/test"/>
     <property name="reports.dir" value="reports"/>
     <property name="build.source.version" value="1.6"/>
     <property name="build.target.version" value="1.6"/>
     <property name="build.output.dir" value="target"/>
-	<property name="build.classes.dir" value="${build.output.dir}/classes"/>
-	<property name="build.test-classes.dir" value="${build.output.dir}/test-classes"/>
-	<property name="build.dist.dir" value="${build.output.dir}/${ant.project.name}"/>
-	<property name="build.dist.jar" value="${build.output.dir}/${ant.project.name}.jar"/>
-	<property name="install.dir" value="${user.home}/.ant/lib"/>
+    <property name="build.classes.dir" value="${build.output.dir}/classes"/>
+    <property name="build.test-classes.dir" value="${build.output.dir}/test-classes"/>
+    <property name="build.dist.dir" value="${build.output.dir}/${ant.project.name}"/>
+    <property name="build.dist.jar" value="${build.output.dir}/${ant.project.name}.jar"/>
+    <property name="install.dir" value="${user.home}/.ant/lib"/>
 
-	<target name="-init">
-		<tstamp/>
-		<mkdir dir="${build.output.dir}"/>
-	</target>
+    <target name="-init">
+        <tstamp/>
+        <mkdir dir="${build.output.dir}"/>
+    </target>
 
     <target name="-test-deps" depends="-init">
         <mkdir dir="${lib.test.dir}"/>
@@ -31,14 +31,15 @@
         </path>
     </target>
 
-    <target name="deps" depends="-test-deps" description="--> Synchronize library dependencies (automatically done normally)."/>
+    <target name="deps" depends="-test-deps"
+            description="--> Synchronize library dependencies (automatically done normally)."/>
 
     <target name="compile" depends="-init" description="--> Compile the source code.">
         <mkdir dir="${build.classes.dir}"/>
         <javac srcdir="${source.java.dir}"
                destdir="${build.classes.dir}"
-			   includeantruntime="true"
-			   source="${build.source.version}"
+               includeantruntime="true"
+               source="${build.source.version}"
                target="${build.target.version}"/>
     </target>
 
@@ -58,26 +59,26 @@
     <target name="-prepare-dist" depends="compile">
         <mkdir dir="${build.dist.dir}"/>
         <copy todir="${build.dist.dir}">
-			<fileset dir="${build.classes.dir}" includes="**/*.class"/>
-			<fileset dir="${source.resources.dir}"/>
-		</copy>
-	</target>
+            <fileset dir="${build.classes.dir}" includes="**/*.class"/>
+            <fileset dir="${source.resources.dir}"/>
+        </copy>
+    </target>
 
-	<target name="dist" depends="-prepare-dist" description="--> Build the JAR.">
-		<jar basedir="${build.dist.dir}" destfile="${build.dist.jar}"/>
-		<echo message="${ant.project.name} has been built to ${build.dist.jar}"/>
-		<echo message="You can run `ant install' to install it to ${install.dir}"/>
-		<echo message="To specify an installation location, add `-Dinstall.dir=where' to your arguments."/>
-	</target>
+    <target name="dist" depends="-prepare-dist" description="--> Build the JAR.">
+        <jar basedir="${build.dist.dir}" destfile="${build.dist.jar}"/>
+        <echo message="${ant.project.name} has been built to ${build.dist.jar}"/>
+        <echo message="You can run `ant install' to install it to ${install.dir}"/>
+        <echo message="To specify an installation location, add `-Dinstall.dir=where' to your arguments."/>
+    </target>
 
-	<target name="install" depends="dist" description="--> Install the JAR to ${install.dir}">
-		<mkdir dir="${install.dir}"/>
-		<copy todir="${install.dir}" file="${build.dist.jar}"/>
-	</target>
+    <target name="install" depends="dist" description="--> Install the JAR to ${install.dir}">
+        <mkdir dir="${install.dir}"/>
+        <copy todir="${install.dir}" file="${build.dist.jar}"/>
+    </target>
 
-	<target name="clean" description="--> Cleans generated files.">
-		<delete dir="${build.output.dir}"/>
-	</target>
+    <target name="clean" description="--> Cleans generated files.">
+        <delete dir="${build.output.dir}"/>
+    </target>
 
     <target name="clean-deps" description="--> Deletes downloaded dependency libraries.">
         <delete dir="${lib.dir}"/>
