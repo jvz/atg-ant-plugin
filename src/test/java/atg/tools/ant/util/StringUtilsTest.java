@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
 
 /**
  * @author msicker
- * @version 1.0.0
+ * @version 2.0
  */
 @RunWith(Parameterized.class)
 public class StringUtilsTest {
