@@ -1,13 +1,9 @@
 package atg.tools.ant.util;
 
-import atg.tools.ant.types.ModuleCollection;
-import org.apache.tools.ant.taskdefs.Manifest;
-import org.apache.tools.ant.types.Path;
+import atg.tools.ant.types.Module;
 import org.apache.tools.ant.types.Resource;
-import org.apache.tools.ant.types.ResourceCollection;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.regex.Pattern;
 
 /**
@@ -19,11 +15,9 @@ public final class ModuleUtils {
     private ModuleUtils() {
     }
 
-    public static final String ATG_REQUIRED = "ATG-Required";
+    public static final FeatureExtractor<Resource, String> RESOURCE_NAME_EXTRACTOR = new NameExtractor();
 
-    public static final String ATG_CLASS_PATH = "ATG-Class-Path";
-
-    public static final String ATG_CONFIG_PATH = "ATG-Config-Path";
+    public static final FeatureExtractor<Resource, String> MODULE_NAME_EXTRACTOR = new ModuleNameExtractor();
 
     private static final Pattern MODULE_SEPARATOR = Pattern.compile("\\.");
 
@@ -31,35 +25,26 @@ public final class ModuleUtils {
         return MODULE_SEPARATOR.matcher(moduleName).replaceAll(File.separator);
     }
 
-    public static String joinResourceNames(final char join, final ResourceCollection resources) {
-        final StringBuilder sb = new StringBuilder();
-        // in order to support older versions of ant, we can't assume ResourceCollection is Iterable
-        final Iterator<Resource> iterator = resources.iterator();
-        //noinspection WhileLoopReplaceableByForEach
-        while (iterator.hasNext()) {
-            sb.append(iterator.next().getName()).append(join);
+    private static class NameExtractor
+            implements FeatureExtractor<Resource, String> {
+
+        @Override
+        public String extract(final Resource original) {
+            return original.getName();
         }
-        if (sb.charAt(sb.length() - 1) == join) {
-            sb.deleteCharAt(sb.length() - 1);
+    }
+
+    private static class ModuleNameExtractor
+            implements FeatureExtractor<Resource, String> {
+
+        @Override
+        public String extract(final Resource original) {
+            if (original instanceof Module) {
+                return ((Module) original).getModule();
+            } else {
+                return null;
+            }
         }
-        return sb.toString();
     }
 
-    public static Manifest.Attribute generateAtgRequiredAttribute(final ModuleCollection modules) {
-        return new Manifest.Attribute(
-                ATG_REQUIRED, joinResourceNames(' ', modules)
-        );
-    }
-
-    public static Manifest.Attribute generateAtgClassPathAttribute(final Path classpath) {
-        return new Manifest.Attribute(
-                ATG_CLASS_PATH, joinResourceNames(' ', classpath)
-        );
-    }
-
-    public static Manifest.Attribute generateAtgConfigPathAttribute(final Path configpath) {
-        return new Manifest.Attribute(
-                ATG_CONFIG_PATH, joinResourceNames(' ', configpath)
-        );
-    }
 }

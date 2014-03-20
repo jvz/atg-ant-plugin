@@ -2,12 +2,17 @@ package atg.tools.ant.tasks;
 
 import atg.tools.ant.types.AtgInstallation;
 import atg.tools.ant.types.ModuleCollection;
-import atg.tools.ant.util.ModuleUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.ManifestException;
 import org.apache.tools.ant.taskdefs.ManifestTask;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
+
+import static atg.tools.ant.util.AtgAttribute.ATG_CLASS_PATH;
+import static atg.tools.ant.util.AtgAttribute.ATG_CONFIG_PATH;
+import static atg.tools.ant.util.AtgAttribute.ATG_REQUIRED;
+import static atg.tools.ant.util.ModuleUtils.MODULE_NAME_EXTRACTOR;
+import static atg.tools.ant.util.ModuleUtils.RESOURCE_NAME_EXTRACTOR;
 
 /**
  * @author msicker
@@ -91,10 +96,11 @@ public class GenerateManifest
         super.execute();
     }
 
+    @SuppressWarnings("unchecked")
     private void addAtgAttributes()
             throws ManifestException {
-        addConfiguredAttribute(ModuleUtils.generateAtgRequiredAttribute(modules));
-        addConfiguredAttribute(ModuleUtils.generateAtgClassPathAttribute(classpath));
-        addConfiguredAttribute(ModuleUtils.generateAtgConfigPathAttribute(configpath));
+        addConfiguredAttribute(ATG_REQUIRED.using(modules.iterator(), MODULE_NAME_EXTRACTOR));
+        addConfiguredAttribute(ATG_CLASS_PATH.using(classpath.iterator(), RESOURCE_NAME_EXTRACTOR));
+        addConfiguredAttribute(ATG_CONFIG_PATH.using(configpath.iterator(), RESOURCE_NAME_EXTRACTOR));
     }
 }

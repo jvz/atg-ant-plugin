@@ -1,5 +1,7 @@
 package atg.tools.ant.types;
 
+import atg.tools.ant.util.AtgAttribute;
+import atg.tools.ant.util.ManifestUtils;
 import atg.tools.ant.util.ModuleUtils;
 import atg.tools.ant.util.StringUtils;
 import org.apache.tools.ant.BuildException;
@@ -10,13 +12,13 @@ import org.apache.tools.ant.types.Reference;
 import org.apache.tools.ant.types.resources.FileResource;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.jar.Manifest;
 import java.util.regex.Pattern;
 
-import static java.util.jar.Attributes.Name;
+import static atg.tools.ant.util.AtgAttribute.ATG_CLASS_PATH;
+import static atg.tools.ant.util.AtgAttribute.ATG_REQUIRED;
 
 /**
  * A Module is a FileResource whose {@code basedir} is the {@link AtgInstallation} and whose
@@ -29,10 +31,6 @@ public class Module
         extends FileResource {
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-
-    private static final Name ATG_REQUIRED = new Name(ModuleUtils.ATG_REQUIRED);
-
-    private static final Name ATG_CLASS_PATH = new Name(ModuleUtils.ATG_CLASS_PATH);
 
     private AtgInstallation atg;
 
@@ -93,23 +91,13 @@ public class Module
 
     private void parseManifestFile()
             throws IOException {
-        final File metaInf = new File(getFile(), "META-INF");
-        if (!metaInf.exists()) {
-            error("File `" + metaInf + "' does not exist.");
-            throw new BuildException(
-                    "The module located at `" + getFile() + "' does not have a META-INF directory."
-            );
-        }
-        final File manifestFile = new File(metaInf, "MANIFEST.MF");
+        final File manifestFile = ManifestUtils.getManifestIn(getFile());
         if (!manifestFile.exists()) {
-            error("File `" + manifestFile + "' does not exist.");
-            throw new BuildException(
-                    "The module located at `" + getFile() + "' does not have a MANIFEST.MF file."
-            );
+            error("File `" + manifestFile + "' does not exist. Can't parse module `" + getModule() + "'.");
+            throw new BuildException();
         }
         debug("Reading manifest file from `" + manifestFile + "'.");
-        final FileInputStream fis = new FileInputStream(manifestFile);
-        manifest = new Manifest(fis);
+        manifest = ManifestUtils.load(manifestFile);
     }
 
     /**
@@ -149,18 +137,8 @@ public class Module
         return path;
     }
 
-    private String[] splitAttribute(final Name name) {
-        return WHITESPACE.split(StringUtils.trimToEmpty(getAttribute(name)));
-    }
-
-    private String getAttribute(final Name name) {
-        debug("Looking for attribute named `" + name + "'.");
-        final String attribute = getManifest().getMainAttributes().getValue(name);
-        if (attribute == null) {
-            debug("Attribute was missing!");
-            return "";
-        }
-        return attribute;
+    private String[] splitAttribute(final AtgAttribute attribute) {
+        return WHITESPACE.split(StringUtils.trimToEmpty(attribute.extractValueFrom(getManifest())));
     }
 
     private static FileList.FileName named(final String name) {
