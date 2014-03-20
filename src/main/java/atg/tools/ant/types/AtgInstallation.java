@@ -1,6 +1,5 @@
 package atg.tools.ant.types;
 
-import atg.tools.ant.util.ModuleUtils;
 import org.apache.tools.ant.types.resources.FileResource;
 
 import java.io.File;
@@ -41,7 +40,7 @@ public class AtgInstallation
         }
         final Module module = new Module();
         module.setAtg(this);
-        module.setModule(ModuleUtils.moduleNameToPath(name));
+        module.setModule(name);
         modules.put(name, module);
         return module;
     }
