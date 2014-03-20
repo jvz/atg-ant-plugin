@@ -36,6 +36,8 @@ public class Module
 
     private AtgInstallation atg;
 
+    private String module;
+
     private Manifest manifest;
 
     /**
@@ -60,8 +62,12 @@ public class Module
      *         name of ATG module.
      */
     public void setModule(final String module) {
-        setName(module);
+        this.module = module;
         setFile(new File(getBaseDir(), ModuleUtils.moduleNameToPath(module)));
+    }
+
+    public String getModule() {
+        return module;
     }
 
     /**
