@@ -4,7 +4,7 @@
             xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
     <info organisation="atg.tools"
           module="atg-ant-plugin"
-          revision="2.0.0.pre1">
+          revision="2.0.0.pre2-SNAPSHOT">
         <license name="MIT" url="http://opensource.org/licenses/MIT"/>
         <description homepage="http://atg-tools.com/">
             Ant library to aid in creating build scripts for Oracle Commerce ATG modules.
