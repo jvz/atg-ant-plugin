@@ -1,6 +1,9 @@
 package atg.tools.ant.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.jar.Manifest;
 
 /**
  * Utility class for dealing with JAR manifest files.
@@ -36,6 +39,26 @@ public final class ManifestUtils {
             throw new IllegalArgumentException("The location `" + metaInf + "' already exists, but is not a directory.");
         }
         return new File(metaInf, MANIFEST_MF);
+    }
+
+    /**
+     * Loads a given manifest file into a Manifest.
+     *
+     * @param file file containing manifest metadata.
+     *
+     * @return said file parsed into a Manifest object.
+     *
+     * @throws IOException if the given file does not exist or is an invalid manifest file.
+     */
+    public static Manifest load(final File file)
+            throws IOException {
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(file);
+            return new Manifest(fis);
+        } finally {
+            FileUtils.closeSilently(fis);
+        }
     }
 
 }
