@@ -67,12 +67,12 @@
             <assertions>
                 <enable/>
             </assertions>
-            <formatter type="xml" usefile="true"/>
+            <formatter type="plain" usefile="true"/>
             <classpath>
                 <path refid="test.classpath"/>
                 <pathelement location="${build.test-classes.dir}"/>
             </classpath>
-            <batchtest todir="${reports.dir}">
+            <batchtest todir="${reports.dir}" fork="true">
                 <fileset dir="${source.test.dir}">
                     <include name="**/*Test.java"/>
                 </fileset>
