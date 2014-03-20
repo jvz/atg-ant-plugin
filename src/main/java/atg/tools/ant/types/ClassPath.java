@@ -52,7 +52,10 @@ public class ClassPath
 
     @Override
     public Iterator<Resource> iterator() {
-        return getPath().iterator();
+        // yay old ant
+        @SuppressWarnings("unchecked")
+        final Iterator<Resource> iterator = getPath().iterator();
+        return iterator;
     }
 
     @Override
