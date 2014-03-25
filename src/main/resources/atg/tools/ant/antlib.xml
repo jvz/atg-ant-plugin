@@ -4,14 +4,16 @@
     <!--
     Usage:
         <path id="atg.classpath">
-            <atg:classpath moduleCollectionRef="atg.modules"/>
+            <atg:module-classpath atg="atg">
+                <atg:modules refid="modules"/>
+            </atg:module-classpath>
         </path>
     -->
     <typedef name="module-classpath" classname="atg.tools.ant.types.ClassPath"/>
 
     <!--
     Usage:
-        <atg:modules atgInstallationRef="atg.installation" id="atg.modules">
+        <atg:modules atg="atg.installation" id="atg.modules">
             <atg:module module="DAS"/>
             <atg:module module="DPS"/>
         </atg:modules>
