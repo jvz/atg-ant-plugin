@@ -5,18 +5,56 @@
          version="2.5">
     <display-name>ExampleModule</display-name>
     <description>Example ATG module project to demonstrate how to build one.</description>
-    <context-param>
-        <param-name>context-root</param-name>
-        <param-value>/</param-value>
-    </context-param>
+    <distributable/>
+    <!-- specify the parent web app (which is usually the DynamoProxyServlet -->
     <context-param>
         <param-name>atg.session.parentContextName</param-name>
         <param-value>/dyn</param-value>
     </context-param>
+    <!-- specify where the bootstrap Dynamo stuff is -->
     <context-param>
         <param-name>atg.dafear.bootstrapContextName</param-name>
         <param-value>/dyn</param-value>
     </context-param>
+    <!-- where should the web app be located? -->
+    <context-param>
+        <param-name>context-root</param-name>
+        <param-value>/</param-value>
+    </context-param>
+    <!-- filter for capturing 4xx/5xx errors -->
+    <filter>
+        <filter-name>ErrorFilter</filter-name>
+        <filter-class>atg.servlet.ErrorFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ErrorFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+    <!-- filter for forwarding pages properly -->
+    <filter>
+        <filter-name>ForwardFilter</filter-name>
+        <filter-class>atg.servlet.ForwardFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ForwardFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+    <!-- filter to allow JSP files to use ATG stuff like droplets -->
+    <filter>
+        <filter-name>PageFilter</filter-name>
+        <filter-class>atg.filter.dspjsp.PageFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>PageFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <!-- Nucleus component browser -->
     <servlet>
         <servlet-name>NucleusServlet</servlet-name>
         <servlet-class>atg.nucleus.servlet.NucleusServlet</servlet-class>
@@ -26,18 +64,30 @@
         <servlet-name>NucleusServlet</servlet-name>
         <url-pattern>/nucleus/*</url-pattern>
     </servlet-mapping>
-    <filter>
-        <filter-name>PageFilter</filter-name>
-        <filter-class>atg.filter.dspjsp.PageFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>PageFilter</filter-name>
-        <url-pattern>*.jsp</url-pattern>
-    </filter-mapping>
+    <!-- Dynamo administrative interface -->
+    <servlet>
+        <servlet-name>DynamoProxyServlet</servlet-name>
+        <servlet-class>atg.nucleus.servlet.NucleusProxyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DynamoProxyServlet</servlet-name>
+        <url-pattern>/dyn/*</url-pattern>
+    </servlet-mapping>
+    <!-- adds ATG EL support -->
+    <listener>
+        <listener-class>atg.taglib.dspjsp.RegisterELResolverServletContextListener</listener-class>
+    </listener>
     <jsp-config>
+        <!-- alias the dsp taglib -->
         <taglib>
             <taglib-uri>dsp</taglib-uri>
             <taglib-location>/WEB-INF/tld/dspjspTaglib1_1.tld</taglib-location>
         </taglib>
+        <!-- make sure to configure .jsp files -->
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+            <scripting-invalid>false</scripting-invalid>
+        </jsp-property-group>
     </jsp-config>
 </web-app>
