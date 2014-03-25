@@ -1,4 +1,4 @@
-<%@ taglib prefix="dsp" uri="http://www.atg.com/taglibs/daf/dspjspTaglib1_0" %>
+<%@ taglib prefix="dsp" uri="dsp" %>
 <dsp:page>
     <dsp:droplet name="/atg/tools/example/Echo">
         <dsp:param name="input" value="Hello, world!"/>
