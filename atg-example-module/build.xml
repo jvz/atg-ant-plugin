@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="ExampleModule" xmlns:atg="antlib:atg.tools.ant" xmlns:ivy="antlib:org.apache.ivy.ant">
+    <property file="build.properties"/>
     <property name="atg.home" value="${user.home}/ATG/ATG10.1.2"/>
     <property name="source.dir" value="src/main"/>
     <property name="source.java.dir" value="${source.dir}/java"/>
@@ -31,8 +32,8 @@
         <atg:module-classpath atg="atg">
             <atg:modules id="atg.modules">
                 <atg:module module="DAS"/>
-                <atg:module module="DSS"/>
-                <!--<atg:module module="DafEar.Admin"/>-->
+                <!-- although DafEar is automatically included when you create an EAR, it doesn't hurt to add it -->
+                <atg:module module="DafEar"/>
             </atg:modules>
         </atg:module-classpath>
     </path>
@@ -75,38 +76,53 @@
         <atg:gen-manifest modules="atg.modules"
                           classpathref="dist.classpath"
                           configpathref="configpath"
-                          file="${dist.dir}/META-INF/MANIFEST.MF"/>
+                          file="${dist.dir}/META-INF/MANIFEST.MF">
+            <attribute name="ATG-Date" value="${DSTAMP}"/>
+            <attribute name="ATG-Time" value="${TSTAMP}"/>
+        </atg:gen-manifest>
     </target>
 
     <target name="war" depends="dist">
         <war basedir="${webapp.dir}" destfile="${dist.war}">
             <lib file="${classes.jar}"/>
+            <!-- if you want the ATG EAR assembler to add your web app, it helps to give it some info! -->
+            <manifest>
+                <attribute name="ATG-Module-Uri" value="${ant.project.name}.war"/>
+                <attribute name="ATG-Context-Root" value="/"/>
+            </manifest>
         </war>
     </target>
 
     <target name="install" depends="war">
         <mkdir dir="${module.home}"/>
-        <copy todir="${module.home}">
+        <copy todir="${module.home}" overwrite="true">
             <fileset dir="${dist.dir}"/>
         </copy>
-        <property name="module.j2ee.dir" value="${module.home}/j2ee-apps"/>
+        <property name="module.j2ee.dir" value="${module.home}/apps"/>
         <mkdir dir="${module.j2ee.dir}"/>
-        <copy todir="${module.j2ee.dir}">
+        <copy todir="${module.j2ee.dir}" overwrite="true">
             <fileset dir="${application.dir}"/>
         </copy>
-        <copy todir="${module.j2ee.dir}" file="${dist.war}"/>
+        <copy todir="${module.j2ee.dir}" file="${dist.war}" overwrite="true"/>
+        <atg:gen-manifest modules="atg.modules"
+                          classpathref="dist.classpath"
+                          configpathref="configpath"
+                          file="${module.home}/META-INF/MANIFEST.MF">
+            <!-- for a module's web app to be used, this needs to be defined as well -->
+            <attribute name="ATG-Web-Module" value="apps/${ant.project.name}.war"/>
+        </atg:gen-manifest>
     </target>
 
     <target name="ear" depends="install">
         <mkdir dir="${dist.ear}"/>
+        <copy todir="${dist.ear}" overwrite="true">
+            <fileset dir="${application.dir}"/>
+        </copy>
         <atg-ear destinationfile="${dist.ear}"
                  dynamoroot="${atg.home}"
                  dynamomodules="${ant.project.name}"
                  servername="ATGProduction"
                  adddistributable="true"/>
-        <copy todir="${dist.ear}">
-            <fileset dir="${application.dir}"/>
-        </copy>
     </target>
 
     <target name="clean">
