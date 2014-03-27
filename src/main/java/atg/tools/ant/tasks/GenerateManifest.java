@@ -8,18 +8,29 @@ import org.apache.tools.ant.taskdefs.ManifestTask;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static atg.tools.ant.util.AtgAttribute.ATG_CLASS_PATH;
 import static atg.tools.ant.util.AtgAttribute.ATG_CONFIG_PATH;
+import static atg.tools.ant.util.AtgAttribute.ATG_DATE;
 import static atg.tools.ant.util.AtgAttribute.ATG_REQUIRED;
+import static atg.tools.ant.util.AtgAttribute.ATG_TIME;
 import static atg.tools.ant.util.ModuleUtils.MODULE_NAME_EXTRACTOR;
 import static atg.tools.ant.util.ModuleUtils.RESOURCE_NAME_EXTRACTOR;
 
 /**
+ * Ant task to generate an ATG-compatible META-INF/MANIFEST.MF file.
+ *
  * @author msicker
  * @version 2.0
  */
 public class GenerateManifest
         extends ManifestTask {
+
+    private final Format dateFormat = new SimpleDateFormat("YYYYMMdd");
+    private final Format timeFormat = new SimpleDateFormat("HH mm ss");
 
     private AtgInstallation atg;
 
@@ -102,5 +113,12 @@ public class GenerateManifest
         addConfiguredAttribute(ATG_REQUIRED.using(modules.iterator(), MODULE_NAME_EXTRACTOR));
         addConfiguredAttribute(ATG_CLASS_PATH.using(classpath.iterator(), RESOURCE_NAME_EXTRACTOR));
         addConfiguredAttribute(ATG_CONFIG_PATH.using(configpath.iterator(), RESOURCE_NAME_EXTRACTOR));
+        final Date now = new Date();
+        synchronized (this.dateFormat) {
+            addConfiguredAttribute(ATG_DATE.create(this.dateFormat.format(now)));
+        }
+        synchronized (this.timeFormat) {
+            addConfiguredAttribute(ATG_TIME.create(this.timeFormat.format(now)));
+        }
     }
 }

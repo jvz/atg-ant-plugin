@@ -13,7 +13,13 @@ import static org.apache.tools.ant.taskdefs.Manifest.Attribute;
  * @version 2.0
  */
 public enum AtgAttribute {
-    ATG_REQUIRED("ATG-Required"), ATG_CLASS_PATH("ATG-Class-Path"), ATG_CONFIG_PATH("ATG-Config-Path");
+    /** Required module list attribute. Space-separated. */
+    ATG_REQUIRED("ATG-Required"),
+    ATG_CLASS_PATH("ATG-Class-Path"),
+    ATG_CONFIG_PATH("ATG-Config-Path"),
+    ATG_DATE("ATG-Date"),
+    ATG_TIME("ATG-Time")
+    ;
 
     private final Attributes.Name name;
 
