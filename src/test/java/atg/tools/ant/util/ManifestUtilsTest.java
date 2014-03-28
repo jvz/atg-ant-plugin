@@ -1,5 +1,6 @@
 package atg.tools.ant.util;
 
+import org.apache.tools.ant.BuildException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -31,7 +32,7 @@ public class ManifestUtilsTest {
         assertThat(manifest.getName(), is(equalTo(MANIFEST_MF)));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = BuildException.class)
     public void testGetManifestFailsWithMetaInfFile()
             throws Exception {
         final File root = temp.newFolder();
