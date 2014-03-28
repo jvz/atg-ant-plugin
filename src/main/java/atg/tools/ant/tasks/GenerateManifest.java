@@ -58,6 +58,7 @@ public class GenerateManifest
 
     public ModuleCollection createModules() {
         modules = new ModuleCollection();
+        modules.setProject(getProject());
         if (atg != null) {
             modules.setAtg(atg);
         }
