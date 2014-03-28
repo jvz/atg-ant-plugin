@@ -23,6 +23,16 @@ public class ModuleCollection
 
     private AtgInstallation atgInstallation;
 
+    @Override
+    public void setRefid(final Reference ref) {
+        super.setRefid(ref);
+        final ModuleCollection other = (ModuleCollection) getCheckedRef();
+        if (this.atgInstallation == null) {
+            this.atgInstallation = other.atgInstallation;
+        }
+        this.addAll(other.modules);
+    }
+
     public void setAtg(final AtgInstallation atgInstallation) {
         this.atgInstallation = atgInstallation;
     }
@@ -56,6 +66,14 @@ public class ModuleCollection
             module.setAtg(atgInstallation);
         }
         modules.add(module);
+    }
+
+    public void addAll(final Collection<? extends Resource> modules) {
+        for (final Resource resource : modules) {
+            if (resource instanceof Module) {
+                this.add((Module) resource);
+            }
+        }
     }
 
     /**
