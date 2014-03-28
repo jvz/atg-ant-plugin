@@ -93,8 +93,7 @@ public class Module
             throws IOException {
         final File manifestFile = ManifestUtils.getManifestIn(getFile());
         if (!manifestFile.exists()) {
-            error("File `" + manifestFile + "' does not exist. Can't parse module `" + getModule() + "'.");
-            throw new BuildException();
+            error("File `" + manifestFile.getAbsolutePath() + "' does not exist. Can't parse module `" + getModule() + "'.");
         }
         debug("Reading manifest file from `" + manifestFile + "'.");
         manifest = ManifestUtils.load(manifestFile);
