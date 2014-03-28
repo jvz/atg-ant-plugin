@@ -71,6 +71,7 @@ public class RequiredModules
             return null;
         }
         modules = new ModuleCollection();
+        modules.setProject(getProject());
         modules.setAtg(atg);
         return modules;
     }
