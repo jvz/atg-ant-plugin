@@ -33,6 +33,9 @@ public final class StringUtils {
         while (iterator.hasNext()) {
             sb.append(extractor.extract(iterator.next())).append(c);
         }
+        if (sb.length() == 0) {
+            return "";
+        }
         if (sb.charAt(sb.length() - 1) == c) {
             sb.deleteCharAt(sb.length() - 1);
         }
