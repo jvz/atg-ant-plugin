@@ -76,10 +76,7 @@
         <atg:gen-manifest modules="atg.modules"
                           classpathref="dist.classpath"
                           configpathref="configpath"
-                          file="${dist.dir}/META-INF/MANIFEST.MF">
-            <attribute name="ATG-Date" value="${DSTAMP}"/>
-            <attribute name="ATG-Time" value="${TSTAMP}"/>
-        </atg:gen-manifest>
+                          file="${dist.dir}/META-INF/MANIFEST.MF"/>
     </target>
 
     <target name="war" depends="dist">
