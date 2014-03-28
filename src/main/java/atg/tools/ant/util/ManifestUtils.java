@@ -1,5 +1,8 @@
 package atg.tools.ant.util;
 
+import org.apache.tools.ant.BuildException;
+
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,14 +34,43 @@ public final class ManifestUtils {
      *                                            not a directory.
      */
     public static File getManifestIn(final File baseDirectory) {
-        if (!baseDirectory.isDirectory()) {
-            throw new IllegalArgumentException("Provided file `" + baseDirectory + "' is not a valid directory.");
-        }
+        verifyDirectoryExists(baseDirectory);
         final File metaInf = new File(baseDirectory, META_INF);
         if (metaInf.exists() && !metaInf.isDirectory()) {
-            throw new IllegalArgumentException("The location `" + metaInf + "' already exists, but is not a directory.");
+            throw new BuildException("The location `" + metaInf + "' already exists, but is not a directory.");
         }
         return new File(metaInf, MANIFEST_MF);
+    }
+
+    public static File touchManifestIn(final File baseDirectory) {
+        verifyDirectoryExists(baseDirectory);
+        final File metaInf = new File(baseDirectory, META_INF);
+        if (!(metaInf.exists() || metaInf.mkdir())) {
+            throw new BuildException("Could not create directory `" + metaInf + "'.");
+        }
+        final File manifest = new File(metaInf, MANIFEST_MF);
+        if (manifest.exists()) {
+            verify("Couldn't touch file `" + manifest + "'.", manifest.setLastModified(System.currentTimeMillis()));
+        } else {
+            try {
+                verify("Couldn't create file `" + manifest + "'.", manifest.createNewFile());
+            } catch (final IOException e) {
+                throw new BuildException("Could not create file: " + manifest, e);
+            }
+        }
+        return manifest;
+    }
+
+    private static void verifyDirectoryExists(final File baseDirectory) {
+        if (!baseDirectory.isDirectory()) {
+            throw new BuildException("Provided file `" + baseDirectory.getAbsolutePath() + "' is not a valid directory.");
+        }
+    }
+
+    private static void verify(final String message, final boolean b) {
+        if (!b) {
+            throw new BuildException(message);
+        }
     }
 
     /**
@@ -52,12 +84,12 @@ public final class ManifestUtils {
      */
     public static Manifest load(final File file)
             throws IOException {
-        FileInputStream fis = null;
+        BufferedInputStream bis = null;
         try {
-            fis = new FileInputStream(file);
-            return new Manifest(fis);
+            bis = new BufferedInputStream(new FileInputStream(file));
+            return new Manifest(bis);
         } finally {
-            FileUtils.closeSilently(fis);
+            FileUtils.closeSilently(bis);
         }
     }
 
