@@ -27,9 +27,9 @@
     -->
     <typedef name="atg" classname="atg.tools.ant.types.AtgInstallation"/>
 
-    <typedef name="manifest-classpath" classname="org.apache.tools.ant.types.Path"/>
+    <typedef name="mfclasspath" classname="org.apache.tools.ant.types.Path"/>
 
-    <typedef name="manifest-configpath" classname="org.apache.tools.ant.types.Path"/>
+    <typedef name="mfconfigpath" classname="org.apache.tools.ant.types.Path"/>
 
     <taskdef name="required-modules" classname="atg.tools.ant.tasks.RequiredModules"/>
 

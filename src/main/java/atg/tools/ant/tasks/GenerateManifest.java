@@ -73,7 +73,7 @@ public class GenerateManifest
         setClasspath((Path) reference.getReferencedObject());
     }
 
-    public Path createClasspath() {
+    public Path createMfClasspath() {
         classpath = new Path(getProject());
         return classpath;
     }
@@ -86,7 +86,7 @@ public class GenerateManifest
         setConfigpath((Path) reference.getReferencedObject());
     }
 
-    public Path createConfigpath() {
+    public Path createMfConfigpath() {
         configpath = new Path(getProject());
         return configpath;
     }
