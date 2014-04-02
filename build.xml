@@ -99,6 +99,7 @@
 
     <target name="install" depends="dist" description="--> Install the JAR to ${install.dir}">
         <mkdir dir="${install.dir}"/>
+        <echo message="Installing ${build.dist.jar} to ${install.dir}"/>
         <copy todir="${install.dir}" file="${build.dist.jar}"/>
     </target>
 
