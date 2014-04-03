@@ -29,7 +29,7 @@ import static atg.tools.ant.util.ModuleUtils.RESOURCE_NAME_EXTRACTOR;
 public class GenerateManifest
         extends ManifestTask {
 
-    private final Format dateFormat = new SimpleDateFormat("YYYYMMdd");
+    private final Format dateFormat = new SimpleDateFormat("yyyyMMdd");
     private final Format timeFormat = new SimpleDateFormat("HH mm ss");
 
     private AtgInstallation atg;
