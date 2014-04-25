@@ -4,11 +4,9 @@ import atg.tools.ant.types.Module;
 import atg.tools.ant.types.ModuleCollection;
 import org.apache.tools.ant.types.Resource;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author msicker
@@ -20,6 +18,10 @@ public class DependencyBuilder {
 
     private final Deque<Module> stack = new ArrayDeque<Module>();
 
+    private final AtomicInteger index = new AtomicInteger(0);
+
+    private final Map<Module, NodeData> connections = new ConcurrentHashMap<Module, NodeData>();
+
     public ModuleCollection build() {
         return modules;
     }
@@ -30,27 +32,81 @@ public class DependencyBuilder {
             copy.add((Module) module);
         }
         Collections.reverse(copy);
+        // Tarjan's strongly connected component algorithm
+        // https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm
         for (final Module module : copy) {
-            addDependency(module);
+            if (!connections.containsKey(module)) {
+                strongConnect(module);
+            }
         }
         return this;
     }
 
-    private void addDependency(final Module module) {
-        // FIXME: may not be enough of a check
-        if (stack.peek().getRequiredModules().contains(module)) {
-            final StringBuilder sb = new StringBuilder("Circular module dependencies: ");
-            for (final Module mod : stack) {
-                sb.append(mod.getFile()).append(" -> ");
-            }
-            sb.append(module.getFile());
-            throw new IllegalArgumentException(sb.toString());
-        }
+    private void strongConnect(final Module module) {
         if (!modules.contains(module)) {
-            stack.push(module);
-            withModules(module.getRequiredModules()); // aww yeah double recursion
             modules.add(module);
-            stack.pop();
+        }
+        connections.put(module, new NodeData(this.index.getAndIncrement()));
+        stack.push(module);
+        final NodeData v = connections.get(module);
+        final ModuleCollection moduleDependencies = module.getRequiredModules();
+        for (final Resource moduleDependency : moduleDependencies) {
+            final Module dependency = (Module) moduleDependency;
+            if (!connections.containsKey(dependency)) {
+                // dependency not yet visited
+                strongConnect(dependency);
+                final NodeData w = connections.get(dependency);
+                v.updateLowLink(w.getLowLink());
+            } else if (stack.contains(dependency)) {
+                // dependency is in current strongly connected component
+                final NodeData w = connections.get(dependency);
+                v.updateLowLink(w.getIndex());
+            }
+        }
+        if (v.isRootNode() && !stack.isEmpty()) {
+            final Collection<Module> cycle = new ArrayList<Module>();
+            while (!stack.isEmpty()) {
+                final Module dependency = stack.pop();
+                cycle.add(dependency);
+                if (dependency.equals(module)) {
+                    break;
+                }
+            }
+            if (!cycle.isEmpty()) {
+                final StringBuilder sb = new StringBuilder("Found a strongly connected component in the dependency graph: ");
+                for (final Module m : cycle) {
+                    // FIXME: -> or <- ?
+                    sb.append(m.getFile()).append(" <- ");
+                }
+                sb.append(module.getFile());
+                throw new DependencyException(sb.toString());
+            }
+        }
+    }
+
+    private static class NodeData {
+        private final int index;
+        private int lowLink;
+
+        private NodeData(final int index) {
+            this.index = index;
+            this.lowLink = index;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
+        public int getLowLink() {
+            return lowLink;
+        }
+
+        public void updateLowLink(final int other) {
+            this.lowLink = Math.min(this.lowLink, other);
+        }
+
+        public boolean isRootNode() {
+            return this.index == this.lowLink;
         }
     }
 }

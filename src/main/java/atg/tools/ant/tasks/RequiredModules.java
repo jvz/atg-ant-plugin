@@ -1,12 +1,15 @@
 package atg.tools.ant.tasks;
 
 import atg.tools.ant.types.AtgInstallation;
+import atg.tools.ant.types.Module;
 import atg.tools.ant.types.ModuleCollection;
 import atg.tools.ant.util.StringUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Reference;
+
+import java.util.Map;
 
 import static atg.tools.ant.util.ModuleUtils.MODULE_NAME_EXTRACTOR;
 
