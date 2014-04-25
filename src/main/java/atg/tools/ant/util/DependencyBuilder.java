@@ -37,17 +37,12 @@ public class DependencyBuilder {
     }
 
     private void addDependency(final Module module) {
-        final StringBuilder sb = new StringBuilder("Circular module dependencies: ");
-        boolean circular = false;
-        for (final Module mod : stack) {
-            if (mod.equals(module)) {
-                circular = true;
-            }
-            if (circular) {
+        // FIXME: may not be enough of a check
+        if (stack.peek().getRequiredModules().contains(module)) {
+            final StringBuilder sb = new StringBuilder("Circular module dependencies: ");
+            for (final Module mod : stack) {
                 sb.append(mod.getFile()).append(" -> ");
             }
-        }
-        if (circular) {
             sb.append(module.getFile());
             throw new IllegalArgumentException(sb.toString());
         }
